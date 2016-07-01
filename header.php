@@ -18,29 +18,38 @@
 <link rel="pingback" href="<?php bloginfo( 'pingback_url' ); ?>">
 <base href="<?php echo site_url(); ?>/">
 
-<!-- <meta property="og:locale" content="nl_NL"> -->
-<meta property="og:url" content="<?php echo site_url(); ?>/">
-<?php if (is_front_page()) : ?>
-<meta property="og:title" content="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?> | <?php echo esc_attr( get_bloginfo( 'description', 'display' ) ); ?>">
-<?php else : ?>
-<meta property="og:title" content="<?php echo the_title(); ?> | <?php echo esc_attr( get_bloginfo( 'description', 'display' ) ); ?>">
-<?php endif; ?>
-<meta property="og:site_name" content="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>">
-<meta property="og:description" content="<?php echo the_excerpt(); ?>">
-<meta property="og:image" content="<?php the_post_thumbnail_url('full'); ?>">
+<!-- if page is content page -->
+<?php if (is_single()) { ?>
+<meta property="og:url" content="<?php the_permalink() ?>"/>
+<meta property="og:title" content="<?php single_post_title(''); ?> | <?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>" />
+<meta property="og:description" content="<?php echo strip_tags(get_the_excerpt($post->ID)); ?>" />
+<meta property="og:type" content="article" />
+<meta property="og:image" content="<?php if (function_exists('wp_get_attachment_thumb_url')) {echo wp_get_attachment_thumb_url(get_post_thumbnail_id($post->ID)); }?>" />
 <!-- <meta property="og:image:width" content="640"> -->
 <!-- <meta property="og:image:height" content="300"> -->
-
 <meta name="twitter:card" content="summary_large_image">
 <!-- <meta name="twitter:site" content="@nytimes"> -->
 <!-- <meta name="twitter:creator" content="@SarahMaslinNir"> -->
-<?php if (is_front_page()) : ?>
-<meta property="twitter:title" content="<?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?> | <?php echo esc_attr( get_bloginfo( 'description', 'display' ) ); ?>">
-<?php else : ?>
-<meta property="twitter:title" content="<?php echo the_title(); ?> | <?php echo esc_attr( get_bloginfo( 'description', 'display' ) ); ?>">
-<?php endif; ?>
-<meta name="twitter:description" content="<?php echo the_excerpt(); ?>">
-<meta name="twitter:image" content="<?php the_post_thumbnail_url('full'); ?>">
+<meta property="twitter:title" content="<?php single_post_title(''); ?> | <?php echo esc_attr( get_bloginfo( 'name', 'display' ) ); ?>">
+<meta name="twitter:description" content="<?php echo strip_tags(get_the_excerpt($post->ID)); ?>">
+<meta name="twitter:image" content="<?php if (function_exists('wp_get_attachment_thumb_url')) {echo wp_get_attachment_thumb_url(get_post_thumbnail_id($post->ID)); }?>">
+
+<!-- if page is others -->
+<?php } else { ?>
+<meta property="og:site_name" content="<?php bloginfo('name'); ?> <?php bloginfo('description'); ?>" />
+<meta property="og:description" content="<?php echo strip_tags(get_the_excerpt($post->ID)); ?>" />
+<meta property="og:type" content="website" />
+<meta property="og:image" content="wp-content/uploads/icons/image.jpg" />
+
+<!-- <meta property="og:image:width" content="640"> -->
+<!-- <meta property="og:image:height" content="300"> -->
+<meta name="twitter:card" content="summary_large_image">
+<!-- <meta name="twitter:site" content="@nytimes"> -->
+<!-- <meta name="twitter:creator" content="@SarahMaslinNir"> -->
+<meta property="twitter:title" content="<?php bloginfo('name'); ?> <?php bloginfo('description'); ?>">
+<meta name="twitter:description" content="<?php echo strip_tags(get_the_excerpt($post->ID)); ?>">
+<meta name="twitter:image" content="wp-content/uploads/icons/image.jpg">
+<?php } ?>
 <?php wp_head(); ?>
 </head>
 
